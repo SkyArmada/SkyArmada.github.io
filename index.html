@@ -49,8 +49,6 @@
 			Started: false
 		};
 		
-		var MenuRects = new Array(3); 
-		
 		function InitMainMenu()
 		{
 			GameSettings.Scene = "Menu";
@@ -104,11 +102,7 @@
 		  RectToMeasure = ctx.measureText('Uber');
 		  var UberRect = {x: 10, y: 250 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width, h: RectToMeasure.actualBoundingBoxAscent};
 		  
-		  MenuRects.push(EasyRect);
-		  MenuRects.push(MediumRect);
-		  MenuRects.push(HardRect);
-		  MenuRects.push(UberRect);
-		  
+	  
 		  if(!CheckMouseHover(MouseInfo.mousePos, EasyRect))
 		  {
 			ctx.fillText('Easy', 10, 70);
@@ -194,8 +188,6 @@
 				MakeMole();
 				GameSettings.Started = true;
 			}
-			
-
 			
 			var j = 0;
 			var ColNum = 0;
