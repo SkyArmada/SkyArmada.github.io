@@ -335,7 +335,7 @@ function DrawGameOver(timer) {
 	ctx.font = '48px sans-serif';
 	UpdateMouseInfo();
 	RectToMeasure = ctx.measureText('Try Again?');
-	var MediumRect = { x: 30, y: 160 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 25, h: RectToMeasure.actualBoundingBoxAscent + 15 };
+	var MediumRect = { x: 30, y: 175 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 25, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 
 	RectToMeasure = ctx.measureText('Menu');
@@ -345,8 +345,7 @@ function DrawGameOver(timer) {
 	ctx.font = '24px sans-serif';
 
 	var score = localStorage.getItem(GameSettings.Difficulty + "Mode");
-	ctx.fillText(score, 170, 105);
-
+	ctx.fillText(score, 220, 105);
 	if (CheckMouseHover(MouseInfo.mousePos, MediumRect)) {
 		if (MouseInfo.MouseClick) {
 			startTimer = timer;
