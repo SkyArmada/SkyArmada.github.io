@@ -122,6 +122,7 @@ function InitMainMenu() {
 	var score = localStorage.getItem("EasyMode");
 	if (score === null) {
 		GameSettings.EasyScore = 0;
+		localStorage.setItem("EasyMode", 0);
 	}
 	else {
 		GameSettings.EasyScore = score;
@@ -129,6 +130,7 @@ function InitMainMenu() {
 	score = localStorage.getItem("MediumMode");
 	if (score === null) {
 		GameSettings.MedScore = 0;
+		localStorage.setItem("MediumMode", 0);
 	}
 	else {
 		GameSettings.MedScore = score;
@@ -136,6 +138,7 @@ function InitMainMenu() {
 	score = localStorage.getItem("HardMode");
 	if (score === null) {
 		GameSettings.HardScore = 0;
+		localStorage.setItem("HardMode", 0);
 	}
 	else {
 		GameSettings.HardScore = score;
@@ -143,6 +146,7 @@ function InitMainMenu() {
 	score = localStorage.getItem("UberMode");
 	if (score === null) {
 		GameSettings.UberScore = 0;
+		localStorage.setItem("UberMode", 0);
 	}
 	else {
 		GameSettings.UberScore = score;
