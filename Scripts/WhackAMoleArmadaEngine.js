@@ -19,7 +19,12 @@ var countDown = 3000;
 var MoleSpawnTimer = 2000;
 var moles = new Array();
 var Mouse = new MouseInfo(canvas);
-
+var errorTimer = 0;
+var ErrorSpot =
+{
+	X: -1,
+	Y: -1
+};
 var GameSettings =
 {
 	holes: 9,
@@ -265,7 +270,7 @@ function DrawGame(timer) {
 	for (var i = 0; i < moles.length; i++) {
 		DrawMole(i, deltaTime);
 	}
-
+	DrawError(deltaTime);
 	if (!GameSettings.GameOver) {
 		window.requestAnimationFrame(DrawGame);
 	}
@@ -326,6 +331,18 @@ function DrawBG() {
     ctx.drawImage(bg, 0, 0);
 }
 
+function DrawError(dt) {
+	if (errorTimer > 0) {
+		var priorStyle = ctx.fillStyle;
+		ctx.fillStyle = 'rgb(255, 0, 0)';
+		ctx.font = '48px sans-serif';
+		ctx.fillText("-2", ErrorSpot.X, ErrorSpot.Y);
+		ctx.fillStyle = priorStyle;
+		errorTimer -= dt;
+    }
+
+}
+
 function DrawMole(i, deltaTime) {
 	var currentMole = moles[i];
 	if (!GameSettings.GameOver) {
@@ -333,11 +350,22 @@ function DrawMole(i, deltaTime) {
 		var MoleRect = currentMole.GetBoundingBox();
 
 		if (Mouse.justClicked) {
-			if (MoleRect.Contains(Mouse.Pos) && currentMole.Active) {
-				GameSettings.score += 1;
-				currentMole.Deactivate();
-				GameSettings.ActiveMoles--;
-			}
+			if (MoleRect.Contains(Mouse.Pos)){
+				if (currentMole.Active) {
+					GameSettings.score += 1;
+					currentMole.Deactivate();
+					GameSettings.ActiveMoles--;
+				}
+				else {
+					GameSettings.score -= 2;
+					errorTimer = 1000;
+					ErrorSpot.X = currentMole.Transform.X;
+					ErrorSpot.Y = currentMole.Transform.Y;
+					if (GameSettings.score < 0) {
+						GameSettings.score = 0;
+                    }
+                }
+            }
 		}
 	}
 	if (currentMole.WentBoom) {
