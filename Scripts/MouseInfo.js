@@ -26,7 +26,7 @@ export default class MouseInfo {
 
 	ClickStart(e, touch) {
 		if (touch) {
-			this.Pos = GetMousePos(e.changedTouches[0]);
+			this.Pos = this.GetMousePos(e.changedTouches[0]);
 		}
 		else {
 			this.Pos = this.GetMousePos(e);
