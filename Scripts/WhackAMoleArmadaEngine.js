@@ -1,3 +1,6 @@
+import Mole from './Mole.js';
+import MouseInfo from './MouseInfo.js';
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var theme = 'Diglett';
@@ -14,71 +17,8 @@ var startTimer;
 var countDown = 3000;
 
 var MoleSpawnTimer = 2000;
-
-function Mole(dx, dy, num) {
-
-	this.Pos = {
-		X: dx,
-		Y: dy
-	};
-	this.Number = num;
-	this.Active = false;
-	this.AnimFrame = 0;
-	this.FrameTime = 0;
-	this.ActiveTime = 0;
-	this.Frames = 8;
-	this.MoleFPS = GameSettings.BoomTime / this.Frames;
-	
-	Mole.prototype.Activate= function() {
-		this.AnimFrame = 0;
-		this.FrameTime = 0;
-		this.ActiveTime = 0;
-		this.Active = true;
-	};
-
-	Mole.prototype.Update = function(dt) {
-		if (this.Active) {
-			this.ActiveTime += dt;
-
-			if (this.ActiveTime > GameSettings.BoomTime) {
-				this.Deactivate();
-				GameSettings.CurrentLives--;
-			}
-
-			this.FrameTime += dt;
-
-			if (this.FrameTime >= this.MoleFPS) {
-				this.FrameTime -= this.MoleFPS;
-				this.AnimFrame++;
-				if (this.AnimFrame >= this.Frames) {
-					this.AnimFrame = this.Frames;
-				}
-			}
-        }
-	};
-
-	Mole.prototype.Deactivate = function() {
-		this.Active = false;
-		this.AnimFrame = 0;
-		this.FrameTime = 0;
-		this.ActiveTime = 0;
-		GameSettings.ActiveMoles--;
-	};
-};
-
 var moles = new Array();
-
-var MouseInfo =
-{
-	mousePos:
-	{
-		x: -1,
-		y: -1
-	},
-	MouseClick: false,
-	clickedLastFrame: false,
-	justClicked: false
-};
+var Mouse = new MouseInfo(canvas);
 
 var GameSettings =
 {
@@ -171,7 +111,7 @@ function InitGame(mode) {
 		GameSettings.MoleTimerStart = 1000;
 		GameSettings.MaxLives = 3;
 		GameSettings.CurrentLives = 3;
-		GameSettings.TimeLimit = 60 * 1000;
+		GameSettings.TimeLimit = 20 * 1000;
 		GameSettings.CurrentTime = 0;
 	}
 	else if (mode === "Medium") {
@@ -238,7 +178,6 @@ function InitGameOver() {
 	window.requestAnimationFrame(DrawGameOver);
 }
 
-
 function DrawIntro(timer) {
 
 	DrawBG();
@@ -259,34 +198,33 @@ function DrawIntro(timer) {
 
 	ctx.font = '48px sans-serif';
 
-	UpdateMouseInfo();
-
-	if (CheckMouseHover(MouseInfo.mousePos, EasyRect)) {
-		if (MouseInfo.justClicked) {
+	Mouse.Update();
+	if (CheckMouseHover(Mouse.Pos, EasyRect)) {
+		if (Mouse.justClicked) {
 			startTimer = timer;
 			InitGame("Easy");
 			return;
 		}
 	}
 
-	if (CheckMouseHover(MouseInfo.mousePos, MediumRect)){
-		if (MouseInfo.justClicked) {
+	if (CheckMouseHover(Mouse.Pos, MediumRect)){
+		if (Mouse.justClicked) {
 			startTimer = timer;
 			InitGame("Medium");
 			return;
 		}
 	}
 
-	if (CheckMouseHover(MouseInfo.mousePos, HardRect)) {
-		if (MouseInfo.justClicked) {
+	if (CheckMouseHover(Mouse.Pos, HardRect)) {
+		if (Mouse.justClicked) {
 			startTimer = timer;
 			InitGame("Hard");
 			return;
 		}
 	}
 
-	if (CheckMouseHover(MouseInfo.mousePos, UberRect)) {
-		if (MouseInfo.justClicked) {
+	if (CheckMouseHover(Mouse.Pos, UberRect)) {
+		if (Mouse.justClicked) {
 			startTimer = timer;
 			InitGame("Uber");
 			return;
@@ -305,7 +243,7 @@ function DrawGame(timer) {
 	if (countDown > 0) {
 		countDown -= deltaTime;
 	}
-	UpdateMouseInfo();
+	Mouse.Update();
 	if (GameSettings.Started) {
 
 		ActivateMole(deltaTime);
@@ -332,7 +270,6 @@ function DrawGame(timer) {
 		window.requestAnimationFrame(DrawGame);
 	}
 	else {
-		console.log(GameSettings.CurrentShowGameOver);
 		if (GameSettings.CurrentShowGameOver <= 0) {
 			InitGameOver();
 		}
@@ -350,8 +287,8 @@ function DrawGameOver(timer) {
 	ctx.drawImage(GameOverLabels, 0, 0);
 	ctx.fillStyle = 'rgb(0, 0, 0)';
 	ctx.font = '48px sans-serif';
-	UpdateMouseInfo();
-	RectToMeasure = ctx.measureText('Try Again?');
+	Mouse.Update()
+	var RectToMeasure = ctx.measureText('Try Again?');
 	var MediumRect = { x: 30, y: 175 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 25, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 
@@ -363,16 +300,16 @@ function DrawGameOver(timer) {
 
 	var score = localStorage.getItem(GameSettings.Difficulty + "Mode");
 	ctx.fillText(score, 220, 105);
-	if (CheckMouseHover(MouseInfo.mousePos, MediumRect)) {
-		if (MouseInfo.MouseClick) {
+	if (CheckMouseHover(Mouse.Pos, MediumRect)) {
+		if (Mouse.Click) {
 			startTimer = timer;
 			InitGame(GameSettings.Difficulty);
 			return;
 		}
 	}
 
-	if (CheckMouseHover(MouseInfo.mousePos, HardRect)) {
-		if (MouseInfo.MouseClick) {
+	if (CheckMouseHover(Mouse.Pos, HardRect)) {
+		if (Mouse.Click) {
 			startTimer = timer;
 			InitMainMenu();
 			return;
@@ -381,18 +318,6 @@ function DrawGameOver(timer) {
 
 	window.requestAnimationFrame(DrawGameOver);
 };
-
-function UpdateMouseInfo() {
-	if (MouseInfo.MouseClick) {
-		if (!MouseInfo.clickedLastFrame) {
-			MouseInfo.justClicked = true;
-		}
-		else {
-			MouseInfo.justClicked = false;
-		}
-		MouseInfo.clickedLastFrame = true;
-	}
-}
 
 function DrawBG() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -405,18 +330,22 @@ function DrawMole(i, deltaTime) {
 	var currentMole = moles[i];
 	if (!GameSettings.GameOver) {
 		currentMole.Update(deltaTime);
-		var MoleRect = { x: currentMole.Pos.X, y: currentMole.Pos.Y, w: 64, h: 64 };
+		var MoleRect = currentMole.GetBoundingBox();
 
-		if (MouseInfo.justClicked) {
-			if (CheckMouseHover(MouseInfo.mousePos, MoleRect) && currentMole.Active) {
+		if (Mouse.justClicked) {
+			if (MoleRect.Contains(Mouse.Pos) && currentMole.Active) {
 				GameSettings.score += 1;
 				currentMole.Deactivate();
+				GameSettings.ActiveMoles--;
 			}
 		}
+	}
+	if (currentMole.WentBoom) {
+		GameSettings.CurrentLives--;
+		GameSettings.ActiveMoles--;
+
     }
-
-
-    ctx.drawImage(hole, (currentMole.AnimFrame * 64), 0, 64, 64, currentMole.Pos.X, currentMole.Pos.Y, 64, 64);
+	currentMole.Draw(ctx);
 }
 
 function DrawLives() {
@@ -464,7 +393,7 @@ function CreateMoles(numMoles) {
 
 		var dx = (ColNum * 64) + GameSettings.XBuffer;
 		var dy = (RowNum * 64) + GameSettings.YBuffer;
-		var newMole = new Mole(dx, dy, i);
+		var newMole = new Mole(dx, dy, GameSettings.BoomTime, hole);
 
 		moles.push(newMole);
 
@@ -521,65 +450,35 @@ function getRandomInt(max) {
 };
 
 canvas.addEventListener('mousemove', function (e) {
-	MouseInfo.mousePos = getMousePos(e);
+	Mouse.Pos = Mouse.GetMousePos(e);
 });
 
 canvas.addEventListener('mousedown', function (e) {
-	ClickStart(e, false);
+	Mouse.ClickStart(e, false);
 });
 
 canvas.addEventListener('mouseup', function (e) {
-	ClickEnd(e);
+	Mouse.ClickEnd(e);
 });
 
 canvas.addEventListener('touchstart', function (e) {
 	e.preventDefault();
-	ClickStart(e, true);
+	Mouse.ClickStart(e, true);
 });
 
 canvas.addEventListener('touchend', function (e) {
-	ClickEnd(e);
+	Mouse.ClickEnd(e);
 });
 
-function ClickStart(e, touch) {
-	if (touch) {
-		MouseInfo.mousePos = getMousePos(e.changedTouches[0]);
-	}
-	else {
-		MouseInfo.mousePos = getMousePos(e);
-	}
 
-	MouseInfo.MouseClick = true;
-}
-
-function ClickEnd(e) {
-	MouseInfo.mousePos.x = -1;
-	MouseInfo.mousePos.y = -1;
-	MouseInfo.MouseClick = false;
-	MouseInfo.clickedLastFrame = false;
-}
-
-function getTouchPos(e) {
-	var r = canvas.getBoundingClientRect();
-	return {
-		x: e.touches[0].clientX - r.left,
-		y: e.touches[0].clientY - r.top
-	};
-}
-
-function getMousePos(e) {
-	var r = canvas.getBoundingClientRect();
-	return {
-		x: e.clientX - r.left,
-		y: e.clientY - r.top
-	};
-}
 
 function CheckMouseHover(mousePos, theRect) {
-	if (mousePos.x >= theRect.x && mousePos.x <= (theRect.x + theRect.w)) {
-		if (mousePos.y >= theRect.y && mousePos.y <= (theRect.y + theRect.h)) {
+	if (mousePos.X >= theRect.x && mousePos.X <= (theRect.x + theRect.w)) {
+		if (mousePos.Y >= theRect.y && mousePos.Y <= (theRect.y + theRect.h)) {
 			return true;
 		}
 	}
 	return false;
 }
+
+export default InitCanvas;
