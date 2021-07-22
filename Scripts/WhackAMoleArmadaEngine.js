@@ -240,7 +240,7 @@ function DrawGame(timer) {
 
 	var deltaTime = timer - startTimer;
 
-	if (countDown > 0) {
+	if (countDown >= 0) {
 		countDown -= deltaTime;
 	}
 	Mouse.Update();
@@ -258,7 +258,7 @@ function DrawGame(timer) {
         }
 	}
 
-	if (countDown < 0 && !GameSettings.Started) {
+	if (countDown <= 0 && !GameSettings.Started) {
 		GameSettings.Started = true;
 	}
 
