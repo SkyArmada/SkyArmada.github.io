@@ -53,7 +53,7 @@ var GameSettings =
 	CurrentShowGameOver: 4 * 1000
 };
 
-function InitCanvas(theme) {	
+function InitCanvas(theme) {
 	hole.src = '/Content/Assets/img/' + theme + '/hole.png';
 	bg.src = '/Content/Assets/img/' + theme + '/bg.png';
 	livesImg.src = '/Content/Assets/img/' + theme + '/lives.png';
@@ -72,7 +72,7 @@ function InitMainMenu() {
 	}
 	else {
 		GameSettings.EasyScore = score;
-    }
+	}
 	score = localStorage.getItem("MediumMode");
 	if (score === null) {
 		GameSettings.MedScore = 0;
@@ -98,7 +98,7 @@ function InitMainMenu() {
 		GameSettings.UberScore = score;
 	}
 	window.requestAnimationFrame(DrawIntro);
-	
+
 };
 
 function InitGame(mode) {
@@ -189,17 +189,17 @@ function DrawIntro(timer) {
 	ctx.drawImage(MenuLabels, 0, 0);
 	ctx.fillStyle = 'rgb(0, 0, 0)';
 	var RectToMeasure = ctx.measureText('Easy');
-	var EasyRect = { x: 94, y: 50 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width+ 10, h: RectToMeasure.actualBoundingBoxAscent+ 15 };
+	var EasyRect = { x: 94, y: 50 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 10, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 	RectToMeasure = ctx.measureText('Medium');
-	var MediumRect = { x: 58, y: 121 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent+ 15 };
+	var MediumRect = { x: 58, y: 121 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 
 	RectToMeasure = ctx.measureText('Hard');
-	var HardRect = { x: 82, y: 195 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent+15 };
+	var HardRect = { x: 82, y: 195 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 	RectToMeasure = ctx.measureText('Uber');
-	var UberRect = { x: 88, y: 275 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent+15 };
+	var UberRect = { x: 88, y: 275 - RectToMeasure.actualBoundingBoxAscent, w: RectToMeasure.width + 45, h: RectToMeasure.actualBoundingBoxAscent + 15 };
 
 	ctx.font = '48px sans-serif';
 
@@ -212,7 +212,7 @@ function DrawIntro(timer) {
 		}
 	}
 
-	if (CheckMouseHover(Mouse.Pos, MediumRect)){
+	if (CheckMouseHover(Mouse.Pos, MediumRect)) {
 		if (Mouse.justClicked) {
 			startTimer = timer;
 			InitGame("Medium");
@@ -235,7 +235,7 @@ function DrawIntro(timer) {
 			return;
 		}
 	}
-	window.requestAnimationFrame(DrawIntro); 
+	window.requestAnimationFrame(DrawIntro);
 };
 
 function DrawGame(timer) {
@@ -256,11 +256,11 @@ function DrawGame(timer) {
 		if (GameSettings.Difficulty !== "Uber") {
 			if (!GameSettings.GameOver) {
 				DrawCountDown(deltaTime);
-            }
+			}
 		}
 		else if (GameSettings.Difficulty === "Uber") {
 			DrawLives();
-        }
+		}
 	}
 
 	if (countDown <= 0 && !GameSettings.Started) {
@@ -282,8 +282,8 @@ function DrawGame(timer) {
 			ctx.drawImage(GameOver, 0, 0);
 			GameSettings.CurrentShowGameOver -= deltaTime;
 			window.requestAnimationFrame(DrawGame);
-        }
-    }
+		}
+	}
 	startTimer = timer;
 };
 
@@ -325,10 +325,10 @@ function DrawGameOver(timer) {
 };
 
 function DrawBG() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'rgb(200, 200, 200)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(bg, 0, 0);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = 'rgb(200, 200, 200)';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.drawImage(bg, 0, 0);
 }
 
 function DrawError(dt) {
@@ -339,7 +339,7 @@ function DrawError(dt) {
 		ctx.fillText("-2", ErrorSpot.X, ErrorSpot.Y);
 		ctx.fillStyle = priorStyle;
 		errorTimer -= dt;
-    }
+	}
 
 }
 
@@ -350,7 +350,7 @@ function DrawMole(i, deltaTime) {
 		var MoleRect = currentMole.GetBoundingBox();
 
 		if (Mouse.justClicked) {
-			if (MoleRect.Contains(Mouse.Pos)){
+			if (MoleRect.Contains(Mouse.Pos)) {
 				if (currentMole.Active) {
 					GameSettings.score += 1;
 					currentMole.Deactivate();
@@ -363,54 +363,57 @@ function DrawMole(i, deltaTime) {
 					ErrorSpot.Y = currentMole.Transform.Y;
 					if (GameSettings.score < 0) {
 						GameSettings.score = 0;
-                    }
-                }
-            }
+					}
+				}
+			}
 		}
 	}
 	if (currentMole.WentBoom) {
 		GameSettings.CurrentLives--;
 		GameSettings.ActiveMoles--;
 
-    }
+	}
 	currentMole.Draw(ctx);
 }
 
 function DrawLives() {
-    if (GameSettings.CurrentLives <= 0) {
-        Boom();
-    }
-    var drawn = 0;
-    for (var i = 0; i < (GameSettings.MaxLives - GameSettings.CurrentLives); i++) {
-        ctx.drawImage(livesImg, 64, 0, 64, 64, (64 * drawn) + 60, 0, 64, 64);
-        drawn++;
-    }
-    for (var i = 0; i < GameSettings.CurrentLives; i++) {
-        ctx.drawImage(livesImg, 0, 0, 64, 64, (64 * drawn) + 60, 0, 64, 64);
-        drawn++;
-    }
+	if (GameSettings.CurrentLives <= 0) {
+		Boom();
+	}
+	var drawn = 0;
+	for (var i = 0; i < (GameSettings.MaxLives - GameSettings.CurrentLives); i++) {
+		ctx.drawImage(livesImg, 64, 0, 64, 64, (64 * drawn) + 60, 0, 64, 64);
+		drawn++;
+		if (drawn >= GameSettings.MaxLives) {
+			return;
+        }
+	}
+	for (var i = 0; i < GameSettings.CurrentLives; i++) {
+		ctx.drawImage(livesImg, 0, 0, 64, 64, (64 * drawn) + 60, 0, 64, 64);
+		drawn++;
+	}
 }
 
 function DrawCountDown(deltaTime) {
-    GameSettings.CurrentTime += deltaTime;
-    var TimeLeft = Math.floor((GameSettings.TimeLimit - GameSettings.CurrentTime) / 1000);
-    ctx.fillText(TimeLeft, 140, 30);
-    if (TimeLeft <= 0) {
-        Boom();
-    }
+	GameSettings.CurrentTime += deltaTime;
+	var TimeLeft = Math.floor((GameSettings.TimeLimit - GameSettings.CurrentTime) / 1000);
+	ctx.fillText(TimeLeft, 140, 30);
+	if (TimeLeft <= 0) {
+		Boom();
+	}
 }
 
 function ActivateMole(deltaTime) {
-    MoleSpawnTimer -= deltaTime;
-    if (MoleSpawnTimer <= 0) {
-        MakeMole();
+	MoleSpawnTimer -= deltaTime;
+	if (MoleSpawnTimer <= 0) {
+		MakeMole();
 
-        var delay = GameSettings.MoleTimerStart - (GameSettings.Punish * GameSettings.score);
-        if (delay <= GameSettings.MoleMinTime) {
-            delay = GameSettings.MoleMinTime;
-        }
-        MoleSpawnTimer = delay;
-    }
+		var delay = GameSettings.MoleTimerStart - (GameSettings.Punish * GameSettings.score);
+		if (delay <= GameSettings.MoleMinTime) {
+			delay = GameSettings.MoleMinTime;
+		}
+		MoleSpawnTimer = delay;
+	}
 }
 
 function CreateMoles(numMoles) {
@@ -430,7 +433,7 @@ function CreateMoles(numMoles) {
 			ColNum = 0;
 			RowNum++;
 		}
-    }
+	}
 };
 
 function Boom() {
@@ -454,7 +457,7 @@ function Boom() {
 function MakeMole() {
 	if (GameSettings.ActiveMoles == GameSettings.holes) {
 		return;
-    }
+	}
 	var newMole = getRandomInt(GameSettings.holes);
 	var tries = 0;
 	var moleFound = true;
@@ -463,12 +466,12 @@ function MakeMole() {
 		tries++;
 		if (tries >= 6) {
 			moleFound = false;
-        }
+		}
 	}
 
 	if (moleFound) {
 		moles[newMole].Activate();
-    }
+	}
 
 	GameSettings.ActiveMoles++;
 };
