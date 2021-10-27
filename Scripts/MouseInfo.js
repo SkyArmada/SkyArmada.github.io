@@ -7,8 +7,11 @@ export default class MouseInfo {
 			Y: -1
 		};
 		this.Click = false;
+		this.RightClick = false;
 		this.clickedLastFrame = false;
+		this.RightclickedLastFrame = false;
 		this.justClicked = false;
+		this.rightClicked = false;
 		this.canvas = canv;
 	};
 
@@ -22,6 +25,32 @@ export default class MouseInfo {
 			}
 			this.clickedLastFrame = true;
 		}
+
+		if (this.RightClick) {
+			if (!this.RightclickedLastFrame) {
+				this.rightClicked = true;
+			}
+			else {
+				this.rightClicked = false;
+			}
+			this.RightclickedLastFrame = true;
+		}
+	};
+
+	RightClickStart(e, touch) {
+		if (touch) {
+			this.Pos = this.GetMousePos(e.changedTouches[0]);
+		}
+		else {
+			this.Pos = this.GetMousePos(e);
+		}
+
+		this.RightClick = true;
+	};
+
+	RightClickEnd(e) {
+		this.RightClick = false;
+		this.RightclickedLastFrame = false;
 	};
 
 	ClickStart(e, touch) {
@@ -36,8 +65,6 @@ export default class MouseInfo {
 	};
 
 	ClickEnd(e) {
-		this.Pos.x = -1;
-		this.Pos.y = -1;
 		this.Click = false;
 		this.clickedLastFrame = false;
 	};

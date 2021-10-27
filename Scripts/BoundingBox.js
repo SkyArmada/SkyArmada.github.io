@@ -27,7 +27,7 @@ export default class BoundingBox {
 		return false;
 	};
 
-	Draw (MyColor = 'rgb(0, 0, 0)') {
+	Draw (ctx, MyColor = 'rgb(0, 0, 0)') {
 		var priorFillStyle = ctx.fillStyle;
 		ctx.fillStyle = MyColor;
 		ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -48,5 +48,18 @@ export default class BoundingBox {
 		this.Bottom = this.y + this.h;
 		this.Left = this.x;
 		this.Right = this.x + this.w;
+	};
+
+	Intersects(otherBB) {
+		if (otherBB.x === undefined || otherBB.x === null || otherBB.y === undefined || otherBB.y === null) {
+			console.log('BoundingBox contains received invalid Point');
+		}
+		if (this.x < otherBB.x + otherBB.w &&
+			this.x + this.w > otherBB.x &&
+			this.y < otherBB.y + otherBB.h &&
+			this.y + this.h > otherBB.y) {
+			return true;
+		}
+		return false;
 	};
 }

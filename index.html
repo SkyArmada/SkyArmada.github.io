@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Whack A Mole by SCS</title>
+    <title> Sky's fun projects</title>
     <link href="/Content/bootstrap.css" rel="stylesheet"/>
 <link href="/Content/site.css" rel="stylesheet"/>
 
@@ -24,25 +24,21 @@
 
 </head>
 <body>
-	<div id="outer">
-		<canvas id="canvas" width="320" height="320" class="d-flex justify-content-center" ></canvas><br>
-	</div>
-	<div id="outerSCS">
-	<a href="http://www.bethegeek.com"><img src="/Content/Assets/img/Diglett/SCSwithBigBlue.png" /></a>
-	</div>
-        
+    <div class="d-flex justify-content-center">
+
+        <canvas id="canvas" width="640" height="640"></canvas></br>
+    </div>
+    <input type="checkbox" id="cbGravity" />Gravity?
+    <input type="text" id="txtStrLength" value="10"/>String Length?
 </body>
 </html>
+<script src='https://git.io/perlin.js'></script>
+<script>
+    document.body.addEventListener("contextmenu", function (evt) { evt.preventDefault(); return false; });
+</script>
 <script type="module">
-    import InitCanvas from "./Scripts/WhackAMoleArmadaEngine.js";
+    import InitCanvas from "../Scripts/Clothtest.js";
 
     InitCanvas('Diglett');
 </script>
 
-    <script src="/Scripts/jquery-3.4.1.js"></script>
-
-    <script src="/Scripts/bootstrap.js"></script>
-
-    
-</body>
-</html>
