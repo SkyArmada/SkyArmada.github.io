@@ -70,7 +70,7 @@ export default class MouseInfo {
 	};
 
 	GetMousePos(e) {
-		var r = canvas.getBoundingClientRect();
+		var r = this.canvas.getBoundingClientRect();
 		return {
 			X: e.clientX - r.left,
 			Y: e.clientY - r.top

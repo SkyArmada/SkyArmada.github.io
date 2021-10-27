@@ -26,10 +26,12 @@
 <body>
     <div class="d-flex justify-content-center">
 
-        <canvas id="canvas" width="640" height="640"></canvas></br>
+        <canvas id="canvasString" width="640" tabindex=0 height="640"></canvas></br>
     </div>
-    <input type="checkbox" id="cbGravity" />Gravity?
-    <input type="text" id="txtStrLength" value="10"/>String Length?
+    <input type="checkbox" id="cbGravity" />Gravity?<br />
+    <input type="text" id="txtGrav" value="0.2" />Gravity power?<br />
+    <input type="text" id="txtStrLength" value="10" />String Length?<br />
+    <input type="text" id="txtPullStr" value="1.25" />Pull strength?<br />
 </body>
 </html>
 <script src='https://git.io/perlin.js'></script>
@@ -41,4 +43,3 @@
 
     InitCanvas('Diglett');
 </script>
-
