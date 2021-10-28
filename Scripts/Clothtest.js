@@ -112,7 +112,7 @@ class Dot {
 				ctx.fillStyle = 'rgb(0, 255, 255)';
 			}
 			else if (this.Parents.length == 0) {
-				ctx.fillStyle = 'rgb(0, 255, 255)';
+				ctx.fillStyle = 'rgb(255, 255, 0)';
 			}
 			else {
 				ctx.fillStyle = 'rgb(255, 0, 0)';
