@@ -316,7 +316,7 @@ document.getElementById('canvasString').addEventListener('keypress', function (e
 		dots.push(newMole);
 	}
 
-	if (e.key == "Y") {
+	if (e.key == "y") {
 		ShowDots = !ShowDots;
     }
 });
