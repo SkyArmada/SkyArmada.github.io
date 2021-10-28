@@ -10,7 +10,7 @@ var dots = new Array();
 var Mouse = new MouseInfo(canvas);
 var startTimer = 0;
 var stringLength = 10;
-var ShowDots = false;
+var ShowDots = true;
 class Dot {
 	constructor(px, py, dx, dy, speed) {
 		this.Pinned = false;
@@ -88,7 +88,7 @@ class Dot {
 			var g = document.querySelector('#cbGravity');
 			var stringLengthtxt = document.querySelector('#txtStrLength');
 			var gravPow = document.querySelector('#txtGrav');
-			var pullStre = document.querySelector('#txtPullStr');
+			var pullStre = document.querySelector('#txtPullStr').value;
 			if (g.checked) {
 				this.Pos.Y += (gravPow.value * dt)
 			}
@@ -99,8 +99,8 @@ class Dot {
 				this.Direction.X = Math.cos(myradians);
 				var distance = Math.hypot(this.Parents[i].Pos.X - this.Pos.X, this.Parents[i].Pos.Y - this.Pos.Y);
 				if ((distance) >= stringLengthtxt.value) {
-					this.Pos.Y += (speed * dt) * (this.Direction.Y * (distance * 1.25));
-					this.Pos.X += (speed * dt) * (this.Direction.X * (distance * 1.25));
+					this.Pos.Y += (speed * dt) * (this.Direction.Y * (distance * pullStre));
+					this.Pos.X += (speed * dt) * (this.Direction.X * (distance * pullStre));
 				}
             }
 		}
@@ -157,7 +157,7 @@ class Dot {
 	};
 }
 
-function InitCanvas(theme) {
+function InitCloth(theme) {
 	dot.src = '/Content/Assets/img/' + theme + '/dot.png';
 	CreateMoles(10);
 	window.requestAnimationFrame(UpdateGame);
@@ -175,7 +175,7 @@ function UpdateGame(timer) {
 			var stringLengthtxt = document.querySelector('#txtStrLength').value;
 			if (distance <= stringLengthtxt * 5) {
 				newMole.AddParent(dots[i]);
-				dots[i].AddKid(newMole);
+				dots[i].AddParent(newMole);
 			}
 		}
 		dots.push(newMole);
@@ -291,27 +291,15 @@ canvas.addEventListener('touchend', function (e) {
 
 document.getElementById('canvasString').addEventListener('keypress', function (e) {
 	if (e.key == " ") {
-		var px = Mouse.Pos.X;//getRandomInt(canvas.width);
-		var py = Mouse.Pos.Y;//getRandomInt(canvas.height);
-		var dx = 0;//Math.random();
-		var dy = 0.2;//Math.random();
-
-		var speed = 0.02;//getRandomInt(2);
-		if (getRandomInt(100) % 2 == 0) {
-			dx *= -1;
+		var newMole = new Dot(Mouse.Pos.X, Mouse.Pos.Y, 0, 0.2, 0.02);
+		for (var i = 0; i < dots.length; i++) {
+			var distance = Math.hypot(Mouse.Pos.X - dots[i].Pos.X, Mouse.Pos.Y - dots[i].Pos.Y);
+			var stringLengthtxt = document.querySelector('#txtStrLength').value;
+			if (distance <= stringLengthtxt * 5) {
+				newMole.AddParent(dots[i]);
+				dots[i].AddParent(newMole);
+			}
 		}
-
-		if (getRandomInt(100) % 2 == 0) {
-			dy *= -1;
-		}
-
-		var r = getRandomInt(255);
-		var g = getRandomInt(255);
-		var b = getRandomInt(255);
-
-		var color = 'rgb(' + r + ', ' + g + ', ' + b + ')';
-		var newMole = new Dot(px, py, dx, dy, speed, null);
-		var prevMole = newMole;
 		newMole.Pinned = true;
 		dots.push(newMole);
 	}
@@ -330,4 +318,4 @@ function CheckMouseHover(mousePos, theRect) {
 	return false;
 }
 
-export default InitCanvas;
+export default InitCloth;

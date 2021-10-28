@@ -1,6 +1,6 @@
 import MouseInfo from './MouseInfo.js';
 
-var canvas = document.getElementById('canvas');
+var canvas = document.getElementById('canvasWallpaper');
 var ctx = canvas.getContext('2d');
 var theme = 'Diglett';
 
@@ -57,9 +57,9 @@ function Dot(px, py, dx, dy, speed, color) {
 	};
 };
 
-function InitCanvas(theme) {
+function InitWallpaper(theme) {
 	dot.src = '/Content/Assets/img/' + theme + '/dot.png';
-	CreateMoles(600);
+	CreateMoles(100);
 	window.requestAnimationFrame(DrawGame);
 }
 
@@ -168,4 +168,4 @@ function CheckMouseHover(mousePos, theRect) {
 	return false;
 }
 
-export default InitCanvas;
+export default InitWallpaper;
