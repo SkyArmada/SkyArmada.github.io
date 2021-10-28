@@ -10,7 +10,7 @@ var dots = new Array();
 var Mouse = new MouseInfo(canvas);
 var startTimer = 0;
 var stringLength = 10;
-
+var ShowDots = false;
 class Dot {
 	constructor(px, py, dx, dy, speed) {
 		this.Pinned = false;
@@ -107,17 +107,20 @@ class Dot {
 	};
 
 	Draw(ctx) {
-		if (this.Pinned) {
-			ctx.fillStyle = 'rgb(0, 255, 255)';
-		}
-		else if (this.Parents.length == 0) {
-			ctx.fillStyle = 'rgb(0, 255, 255)';
-		}
-		else {
-			ctx.fillStyle = 'rgb(255, 0, 0)';
-		}
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.Pos.X, this.Pos.Y, 4, 4);
+		if (ShowDots) {
+			if (this.Pinned) {
+				ctx.fillStyle = 'rgb(0, 255, 255)';
+			}
+			else if (this.Parents.length == 0) {
+				ctx.fillStyle = 'rgb(0, 255, 255)';
+			}
+			else {
+				ctx.fillStyle = 'rgb(255, 0, 0)';
+			}
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.Pos.X, this.Pos.Y, 4, 4);
+        }
+
 
 		//for (var i = 0; i < this.Parents.length; i++) {
 
@@ -312,6 +315,10 @@ document.getElementById('canvasString').addEventListener('keypress', function (e
 		newMole.Pinned = true;
 		dots.push(newMole);
 	}
+
+	if (e.key == "Y") {
+		ShowDots = !ShowDots;
+    }
 });
 
 function CheckMouseHover(mousePos, theRect) {
