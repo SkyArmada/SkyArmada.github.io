@@ -107,16 +107,17 @@ class Dot {
 	};
 
 	Draw(ctx) {
-		//if (this.Pinned) {
-		//	ctx.fillStyle = 'rgb(0, 255, 255)';
-		//}
-		//else if (this.Parents.length == 0) {
-		//	ctx.fillStyle = 'rgb(200, 120, 120)';
-		//}
-		//else {
-		//	ctx.fillStyle = 'rgb(255, 0, 0)';
-		//}
-		//ctx.fillRect(this.Pos.X, this.Pos.Y, 4, 4);
+		if (this.Pinned) {
+			ctx.fillStyle = 'rgb(0, 255, 255)';
+		}
+		else if (this.Parents.length == 0) {
+			ctx.fillStyle = 'rgb(0, 255, 255)';
+		}
+		else {
+			ctx.fillStyle = 'rgb(255, 0, 0)';
+		}
+		ctx.fillStyle = this.color;
+		ctx.fillRect(this.Pos.X, this.Pos.Y, 4, 4);
 
 		//for (var i = 0; i < this.Parents.length; i++) {
 
@@ -216,7 +217,10 @@ function DrawGame() {
 };
 
 function CreateMoles(numMoles) {
-	var px = 50;//getRandomInt(canvas.width);
+	for (var i = 0; i < numMoles; i++) {
+
+    }
+	var px = 50 + (10 * i);//getRandomInt(canvas.width);
 	var py = 50;//getRandomInt(canvas.height);
 	var dx = 0;//Math.random();
 	var dy = 0.2;//Math.random();
